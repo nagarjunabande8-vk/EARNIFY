@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Browse jobs{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Open jobs</h1>
+</div>
+
+<form method="GET" action="{{ url_for('jobs') }}" class="filter-bar">
+  <input type="text" name="q" placeholder="Search by keyword" value="{{ search }}">
+  <select name="category">
+    <option value="">All categories</option>
+    <option value="Web Development" {% if category == 'Web Development' %}selected{% endif %}>Web Development</option>
+    <option value="Design" {% if category == 'Design' %}selected{% endif %}>Design</option>
+    <option value="Writing" {% if category == 'Writing' %}selected{% endif %}>Writing</option>
+    <option value="Data" {% if category == 'Data' %}selected{% endif %}>Data</option>
+    <option value="Other" {% if category == 'Other' %}selected{% endif %}>Other</option>
+  </select>
+  <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<div class="job-list">
+  {% for job in jobs %}
+  <a href="{{ url_for('job_detail', job_id=job.id) }}" class="job-card">
+    <div class="job-card-top">
+      <h3>{{ job.title }}</h3>
+      <span class="job-budget">₹{{ job.budget }}</span>
+    </div>
+    <p class="job-meta">Posted by {{ job.client_name }} in {{ job.category }}</p>
+    <p class="job-desc">{{ job.description[:140] }}{% if job.description|length > 140 %}…{% endif %}</p>
+  </a>
+  {% else %}
+  <p class="empty-state">No open jobs match that search right now. Try a different keyword or category.</p>
+  {% endfor %}
+</div>
+{% endblock %}

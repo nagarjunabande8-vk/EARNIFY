@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ job.title }}{% endblock %}
+{% block content %}
+<div class="job-detail">
+  <a href="{{ url_for('jobs') }}" class="back-link">All jobs</a>
+  <h1>{{ job.title }}</h1>
+  <p class="job-meta">Posted by {{ job.client_name }} in {{ job.category }}</p>
+  <p class="job-budget-large">Budget: ₹{{ job.budget }}</p>
+  {% if job.deadline %}<p class="job-meta">Deadline: {{ job.deadline }}</p>{% endif %}
+  {% if job.skills_required %}<p class="job-meta">Skills needed: {{ job.skills_required }}</p>{% endif %}
+
+  <div class="job-description">
+    <h3>Description</h3>
+    <p>{{ job.description }}</p>
+  </div>
+
+  {% if session.get('role') == 'freelancer' %}
+    {% if already_applied %}
+      <p class="applied-note">You already applied to this job.</p>
+    {% else %}
+      <form method="POST" action="{{ url_for('apply_to_job', job_id=job.id) }}" class="apply-form">
+        <h3>Apply to this job</h3>
+        <label for="cover_letter">Cover letter</label>
+        <textarea id="cover_letter" name="cover_letter" rows="5" required></textarea>
+        <span class="char-count" id="char-count"></span>
+
+        <label for="proposed_rate">Your proposed rate (₹)</label>
+        <input type="number" id="proposed_rate" name="proposed_rate" min="0" step="0.01" required>
+
+        <button type="submit" class="btn btn-primary">Submit application</button>
+      </form>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

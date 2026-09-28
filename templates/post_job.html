@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Post a job{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Post a new job</h2>
+  <form method="POST" action="{{ url_for('new_job') }}">
+    <label for="title">Job title</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="6" required></textarea>
+
+    <label for="budget">Budget (₹)</label>
+    <input type="number" id="budget" name="budget" min="0" step="0.01" required>
+
+    <label for="category">Category</label>
+    <select id="category" name="category" required>
+      <option value="Web Development">Web Development</option>
+      <option value="Design">Design</option>
+      <option value="Writing">Writing</option>
+      <option value="Data">Data</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="skills_required">Skills required</label>
+    <input type="text" id="skills_required" name="skills_required" placeholder="e.g. Python, Flask, MySQL">
+
+    <label for="deadline">Deadline (optional)</label>
+    <input type="date" id="deadline" name="deadline">
+
+    <button type="submit" class="btn btn-primary btn-block">Post job</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,635 @@
+:root {
+  --bg: #F6F6F1;
+  --surface: #FFFFFF;
+  --ink: #16241F;
+  --primary: #1F5C4B;
+  --primary-hover: #17473A;
+  --accent: #C9971C;
+  --muted: #5B6B63;
+  --border: #DFE3DC;
+  --success: #2E7D4F;
+  --success-bg: #E8F3EC;
+  --error: #B3402A;
+  --error-bg: #FBEAE5;
+  --pending: #8A6D1D;
+  --pending-bg: #F6EDD6;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.4rem;
+  --fs-xl: 2rem;
+  --fs-2xl: 2.75rem;
+
+  --radius: 6px;
+  --max-width: 1040px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+h1 { font-size: var(--fs-xl); }
+h2 { font-size: var(--fs-lg); }
+h3 { font-size: var(--fs-md); }
+
+p {
+  margin: 0 0 1em;
+  max-width: 65ch;
+}
+
+a {
+  color: var(--primary);
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/*Header / nav*/
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.nav-links a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+}
+
+.nav-links a:hover {
+  color: var(--primary);
+}
+
+.nav-user {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.nav-toggle span {
+  width: 20px;
+  height: 2px;
+  background: var(--ink);
+}
+
+/* Buttons */
+ 
+
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.btn-ghost:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.flash-stack {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.flash {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  font-size: var(--fs-sm);
+  border-left: 3px solid transparent;
+}
+
+.flash-success {
+  background: var(--success-bg);
+  color: var(--success);
+  border-left-color: var(--success);
+}
+
+.flash-error {
+  background: var(--error-bg);
+  color: var(--error);
+  border-left-color: var(--error);
+}
+
+
+.hero {
+  padding: 3.5rem 0 2.5rem;
+  max-width: 640px;
+}
+
+.hero h1 {
+  font-size: var(--fs-2xl);
+}
+
+.hero-sub {
+  color: var(--muted);
+  font-size: var(--fs-md);
+}
+
+.hero-paths {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.path-card {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.path-card:nth-child(2) {
+  border-left-color: var(--accent);
+}
+
+.path-card:hover {
+  border-left-width: 6px;
+}
+
+.path-label {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.path-desc {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 1rem 0 3.5rem;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+
+.features p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.auth-card, .form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 440px;
+  margin: 2rem auto;
+}
+
+.form-card {
+  max-width: 560px;
+}
+
+label {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  margin: 1rem 0 0.35rem;
+}
+
+label:first-of-type {
+  margin-top: 0;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+}
+
+fieldset.role-select {
+  border: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+fieldset.role-select legend {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  padding: 0;
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  margin: 0.5rem 0 0;
+}
+
+.role-option input {
+  width: auto;
+}
+
+.field-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  min-height: 1.2em;
+}
+
+button.btn-block {
+  margin-top: 1.5rem;
+}
+
+.auth-switch {
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+
+.char-count {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+/*Job list / ticket-stub cards */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 0 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-bar input[type="text"] {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-bar select {
+  width: auto;
+}
+
+.job-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-bottom: 3rem;
+}
+
+.job-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.job-card-static {
+  cursor: default;
+}
+
+a.job-card:hover {
+  border-left-width: 6px;
+}
+
+.job-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.job-card-top h3 {
+  margin: 0;
+}
+
+.job-budget {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.job-budget-large {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--accent);
+  margin: 0.25rem 0 1rem;
+}
+
+.job-meta {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  margin: 0.35rem 0 0;
+}
+
+.job-desc {
+  margin: 0.5rem 0 0;
+  color: var(--ink);
+  font-size: var(--fs-sm);
+}
+
+.empty-state {
+  color: var(--muted);
+  padding: 2rem 0;
+}
+
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  display: inline-block;
+}
+
+.status-open .status-dot,
+.status-accepted .status-dot {
+  background: var(--success);
+}
+
+.status-open,
+.status-accepted {
+  color: var(--success);
+}
+
+.status-pending .status-dot {
+  background: var(--pending);
+}
+
+.status-pending {
+  color: var(--pending);
+}
+
+.status-closed .status-dot,
+.status-rejected .status-dot {
+  background: var(--error);
+}
+
+.status-closed,
+.status-rejected {
+  color: var(--error);
+}
+
+.back-link {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.back-link:hover {
+  color: var(--primary);
+}
+
+.job-detail {
+  max-width: 640px;
+  padding: 1rem 0 3rem;
+}
+
+.job-description {
+  margin-top: 1.5rem;
+}
+
+.apply-form, .applicant-actions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.applicant-actions {
+  display: flex;
+  gap: 0.75rem;
+  border-top: none;
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.applicant-actions form {
+  margin: 0;
+}
+
+.applied-note {
+  margin-top: 2rem;
+  padding: 0.9rem 1rem;
+  background: var(--success-bg);
+  color: var(--success);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--success);
+}
+
+.cover-letter {
+  font-size: var(--fs-sm);
+  margin: 0.6rem 0;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+}
+
+.site-footer p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.5rem 1.5rem;
+    gap: 0.9rem;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .header-inner {
+    position: relative;
+  }
+
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+
+  .hero-paths {
+    flex-direction: column;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-card, .form-card {
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+  }
+}

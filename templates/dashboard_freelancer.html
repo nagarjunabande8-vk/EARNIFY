@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}My applications{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>My applications</h1>
+  <a href="{{ url_for('jobs') }}" class="btn btn-primary">Browse jobs</a>
+</div>
+
+<div class="job-list">
+  {% for a in applications %}
+  <div class="job-card job-card-static">
+    <div class="job-card-top">
+      <h3>{{ a.title }}</h3>
+      <span class="status status-{{ a.status }}"><i class="status-dot"></i>{{ a.status }}</span>
+    </div>
+    <p class="job-meta">You proposed ₹{{ a.proposed_rate }} on a ₹{{ a.budget }} budget</p>
+  </div>
+  {% else %}
+  <p class="empty-state">You haven't applied to any jobs yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

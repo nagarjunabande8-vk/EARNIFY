@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}My jobs{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>My posted jobs</h1>
+  <a href="{{ url_for('new_job') }}" class="btn btn-primary">Post a job</a>
+</div>
+
+<div class="job-list">
+  {% for job in jobs %}
+  <div class="job-card job-card-static">
+    <div class="job-card-top">
+      <h3>{{ job.title }}</h3>
+      <span class="status status-{{ job.status }}"><i class="status-dot"></i>{{ job.status }}</span>
+    </div>
+    <p class="job-meta">₹{{ job.budget }} in {{ job.category }}</p>
+    <a href="{{ url_for('view_applicants', job_id=job.id) }}" class="btn btn-ghost btn-sm">View applicants</a>
+  </div>
+  {% else %}
+  <p class="empty-state">You haven't posted any jobs yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}
