@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }} — Earnify{% endblock %}
+
+{% block content %}
+<div class="container job-detail-page">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Home</a>
+    <span>/</span>
+    <a href="{{ url_for('jobs') }}">Jobs</a>
+    <span>/</span>
+    <span>{{ job.title }}</span>
+  </div>
+
+  <!-- Job Header -->
+  <div class="job-detail-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 8px;">
+      <h1>{{ job.title }}</h1>
+      <span class="budget-badge" style="font-size: 16px; padding: 6px 16px;">
+        ${{ "%.0f"|format(job.budget) }}
+      </span>
+    </div>
+
+    <div class="job-detail-meta">
+      <span class="item">💼 {{ job.category }}</span>
+      <span class="item">👤 Client: <strong>{{ job.client.name if job.client else 'Client' }}</strong></span>
+      <span class="item">🕒 Posted: {{ job.created_at.strftime('%B %d, %Y') }}</span>
+      <span class="item">
+        <span class="badge badge-{{ job.status }}">
+          <span class="badge-dot"></span>
+          {{ job.status|title }}
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Job Overview Highlights -->
+  <div class="detail-info-grid">
+    <div class="detail-info-item">
+      <label>Project Budget</label>
+      <div class="value" style="color: var(--secondary);">${{ "%.0f"|format(job.budget) }}</div>
+    </div>
+    <div class="detail-info-item">
+      <label>Submission Deadline</label>
+      <div class="value">{{ job.deadline.strftime('%B %d, %Y') if job.deadline else 'Flexible Timeline' }}</div>
+    </div>
+  </div>
+
+  <!-- Job Description Body -->
+  <div class="job-detail-body">
+    <h3>Project Description</h3>
+    <p>{{ job.description }}</p>
+
+    <h3 style="margin-top: 28px;">Skills Required</h3>
+    <div class="skill-tags">
+      {% for skill in job.skills_list %}
+        <span class="skill-tag" style="font-size: 13px; padding: 4px 12px;">{{ skill }}</span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Action Section -->
+  {% if session.get('user_id') == job.client_id %}
+    <div class="apply-section" style="border-left: 4px solid var(--secondary);">
+      <h3>Job Management (Client View)</h3>
+      <p class="text-secondary">You created this job posting. You can review all submitted freelancer applications.</p>
+      <a href="{{ url_for('view_applicants', job_id=job.id) }}" class="btn btn-primary btn-lg">
+        👥 Review Applicants ({{ job.applications|length }})
+      </a>
+    </div>
+  {% elif session.get('role') == 'freelancer' %}
+    {% if already_applied %}
+      <div class="applied-note">
+        <span style="font-size: 20px;">✓</span>
+        <div>
+          <strong>Proposal Submitted!</strong>
+          <div style="font-size: 13px; margin-top: 2px;">
+            You have already applied for this job. Track status updates on your 
+            <a href="{{ url_for('freelancer_dashboard') }}" style="text-decoration: underline; color: inherit; font-weight: 600;">Dashboard</a>.
+          </div>
+        </div>
+      </div>
+    {% elif job.status == 'open' %}
+      <div class="apply-section">
+        <h3>Submit a Proposal for this Project</h3>
+        <p class="text-secondary" style="margin-bottom: 24px;">Introduce yourself to the client and outline your approach, timeline, and rate.</p>
+
+        <form method="POST" action="{{ url_for('apply_to_job', job_id=job.id) }}">
+          <div class="form-group">
+            <label for="proposed_rate">Your Proposed Rate ($ USD)</label>
+            <input 
+              type="number" 
+              id="proposed_rate" 
+              name="proposed_rate" 
+              class="form-control" 
+              step="0.01" 
+              min="1" 
+              value="{{ "%.0f"|format(job.budget) }}" 
+              required
+            >
+            <div class="form-hint">Client's budget is ${{ "%.0f"|format(job.budget) }}</div>
+          </div>
+
+          <div class="form-group">
+            <label for="cover_letter">Cover Letter &amp; Relevant Experience</label>
+            <textarea 
+              id="cover_letter" 
+              name="cover_letter" 
+              class="form-control" 
+              rows="6" 
+              placeholder="Explain why you are the best fit for this project, relevant skills or previous projects..." 
+              required
+            ></textarea>
+            <span id="char-count" class="char-count">0 characters</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg">Submit Proposal</button>
+        </form>
+      </div>
+    {% else %}
+      <div class="applied-note" style="background: var(--warning-bg); color: #92400e;">
+        <div>This job posting is closed and no longer accepting new proposals.</div>
+      </div>
+    {% endif %}
+  {% elif not session.get('user_id') %}
+    <div class="apply-section text-center">
+      <h3>Interested in this project?</h3>
+      <p class="text-secondary">Sign in or create a freelancer account to submit your proposal.</p>
+      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 16px;">
+        <a href="{{ url_for('login') }}" class="btn btn-outline">Log In to Apply</a>
+        <a href="{{ url_for('signup', role='freelancer') }}" class="btn btn-primary">Sign Up as Freelancer</a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

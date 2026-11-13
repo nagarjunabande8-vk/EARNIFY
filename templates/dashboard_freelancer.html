@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Freelancer Dashboard — Earnify{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+  <!-- Left Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar">{{ session.get('name', 'F')[0]|upper }}</div>
+      <div class="sidebar-name">{{ session.get('name') }}</div>
+      <span class="sidebar-role">Freelancer</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('freelancer_dashboard') }}" class="active">
+        <span>📊</span> Dashboard
+      </a>
+      <a href="{{ url_for('jobs') }}">
+        <span>🔍</span> Find Jobs
+      </a>
+      <a href="{{ url_for('my_profile') }}">
+        <span>👤</span> My Profile
+      </a>
+      <a href="{{ url_for('edit_profile') }}">
+        <span>✏️</span> Edit Profile
+      </a>
+      <a href="{{ url_for('logout') }}">
+        <span>🚪</span> Log Out
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <div class="dashboard-header">
+      <div>
+        <h1>Welcome, {{ session.get('name') }}! 👋</h1>
+        <p class="text-secondary" style="margin: 4px 0 0;">Track your proposals, review application statuses, and discover new jobs.</p>
+      </div>
+      <a href="{{ url_for('jobs') }}" class="btn btn-primary">🔍 Find Jobs</a>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Total Applied</h3>
+          <div class="stat-value">{{ stats.total }}</div>
+        </div>
+        <div class="stat-icon blue">📄</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Accepted</h3>
+          <div class="stat-value">{{ stats.accepted }}</div>
+        </div>
+        <div class="stat-icon green">🎉</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Pending</h3>
+          <div class="stat-value">{{ stats.pending }}</div>
+        </div>
+        <div class="stat-icon yellow">⏳</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>Rejected</h3>
+          <div class="stat-value">{{ stats.rejected }}</div>
+        </div>
+        <div class="stat-icon red">✖</div>
+      </div>
+    </div>
+
+    <!-- Applications Table -->
+    <div class="data-card">
+      <div class="data-card-header">
+        <h3>My Submitted Proposals ({{ applications|length }})</h3>
+        <a href="{{ url_for('jobs') }}" class="btn btn-sm btn-outline">Find More Work</a>
+      </div>
+
+      {% if applications %}
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Client</th>
+                <th>Client Budget</th>
+                <th>My Rate</th>
+                <th>Applied On</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in applications %}
+                <tr>
+                  <td>
+                    <a href="{{ url_for('job_detail', job_id=app.job.id) }}" style="font-weight: 600;">
+                      {{ app.job.title }}
+                    </a>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                      {{ app.job.category }}
+                    </div>
+                  </td>
+                  <td>{{ app.job.client.name if app.job.client else 'Client' }}</td>
+                  <td>${{ "%.0f"|format(app.job.budget) }}</td>
+                  <td><strong style="color: var(--secondary);">${{ "%.0f"|format(app.proposed_rate) }}</strong></td>
+                  <td>{{ app.applied_at.strftime('%b %d, %Y') }}</td>
+                  <td>
+                    <span class="badge badge-{{ app.status }}">
+                      <span class="badge-dot"></span>
+                      {{ app.status|title }}
+                    </span>
+                  </td>
+                  <td>
+                    <a href="{{ url_for('job_detail', job_id=app.job.id) }}" class="btn btn-sm btn-ghost">Details</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-state-icon">💼</div>
+          <h3>You haven't submitted any proposals yet</h3>
+          <p>Browse through hundreds of available projects and submit your first proposal today.</p>
+          <a href="{{ url_for('jobs') }}" class="btn btn-primary">Browse Available Jobs</a>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Recommended Jobs -->
+    {% if recommended_jobs %}
+      <div class="recommended-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3>Recommended For You</h3>
+          <a href="{{ url_for('jobs') }}" style="font-size: 13px; font-weight: 600;">View All &rarr;</a>
+        </div>
+        <div class="recommended-grid">
+          {% for job in recommended_jobs %}
+            <a href="{{ url_for('job_detail', job_id=job.id) }}" class="recommended-card">
+              <span class="skill-tag" style="margin-bottom: 8px; display: inline-block;">{{ job.category }}</span>
+              <h4>{{ job.title }}</h4>
+              <p class="meta">${{ "%.0f"|format(job.budget) }} &bull; Posted {{ job.created_at.strftime('%b %d') }}</p>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Post a New Job — Earnify{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 32px; padding-bottom: 60px;">
+  <div class="breadcrumb" style="max-width: 640px; margin: 0 auto 16px;">
+    <a href="{{ url_for('client_dashboard') }}">Dashboard</a>
+    <span>/</span>
+    <span>Post a Job</span>
+  </div>
+
+  <div class="form-card">
+    <h2>Post a New Job</h2>
+    <p class="text-secondary" style="margin-top: -16px; margin-bottom: 24px;">
+      Provide comprehensive project details to attract the most qualified freelancers.
+    </p>
+
+    <form method="POST" action="{{ url_for('new_job') }}">
+      <div class="form-group">
+        <label for="title">Job Title</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          class="form-control" 
+          placeholder="e.g. Build a Responsive Landing Page in Flask" 
+          required
+        >
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category" class="form-control" required>
+            <option value="" disabled selected>Select category...</option>
+            {% for cat in categories %}
+              <option value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="budget">Budget ($ USD)</label>
+          <input 
+            type="number" 
+            id="budget" 
+            name="budget" 
+            class="form-control" 
+            placeholder="e.g. 500" 
+            min="5" 
+            step="1" 
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="skills_required">Skills Required (Comma separated)</label>
+          <input 
+            type="text" 
+            id="skills_required" 
+            name="skills_required" 
+            class="form-control" 
+            placeholder="e.g. HTML5, CSS3, JavaScript, Flask" 
+            data-tag-input="true"
+          >
+          <div class="form-hint">Separate multiple skills with commas</div>
+        </div>
+
+        <div class="form-group">
+          <label for="deadline">Target Deadline (Optional)</label>
+          <input 
+            type="date" 
+            id="deadline" 
+            name="deadline" 
+            class="form-control"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Detailed Job Description</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          class="form-control" 
+          rows="8" 
+          placeholder="Explain the scope of the project, required deliverables, timelines, and requirements..." 
+          required
+        ></textarea>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button type="submit" class="btn btn-primary btn-lg">Publish Job Posting</button>
+        <a href="{{ url_for('client_dashboard') }}" class="btn btn-ghost btn-lg">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

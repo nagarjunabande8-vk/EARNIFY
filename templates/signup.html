@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up — Earnify{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card" style="max-width: 480px;">
+    <h2>Join Earnify Today</h2>
+    <p class="auth-subtitle">Select your account type and start working or hiring in minutes</p>
+
+    <form method="POST" action="{{ url_for('signup') }}" id="signup-form">
+      <div class="form-group">
+        <label>I want to:</label>
+        <div class="role-cards">
+          <label class="role-card">
+            <input 
+              type="radio" 
+              name="role" 
+              value="freelancer" 
+              {% if preselected_role == 'freelancer' %}checked{% endif %}
+            >
+            <div class="role-card-content">
+              <span class="role-card-icon">🚀</span>
+              <span class="role-card-title">Work as Freelancer</span>
+              <span class="role-card-desc">Find projects & earn money</span>
+            </div>
+          </label>
+
+          <label class="role-card">
+            <input 
+              type="radio" 
+              name="role" 
+              value="client" 
+              {% if preselected_role == 'client' %}checked{% endif %}
+            >
+            <div class="role-card-content">
+              <span class="role-card-icon">💼</span>
+              <span class="role-card-title">Hire Talent</span>
+              <span class="role-card-desc">Post jobs & hire experts</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-control" 
+          placeholder="e.g. Alex Morgan" 
+          required 
+          autocomplete="name"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          placeholder="name@example.com" 
+          required 
+          autocomplete="email"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="form-control" 
+            placeholder="At least 6 characters" 
+            minlength="6" 
+            required 
+            autocomplete="new-password"
+          >
+          <button type="button" class="password-toggle" aria-label="Toggle password visibility">👁</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm_password">Confirm Password</label>
+        <div class="password-wrapper">
+          <input 
+            type="password" 
+            id="confirm_password" 
+            name="confirm_password" 
+            class="form-control" 
+            placeholder="Confirm your password" 
+            minlength="6" 
+            required 
+            autocomplete="new-password"
+          >
+          <button type="button" class="password-toggle" aria-label="Toggle password visibility">👁</button>
+        </div>
+        <div id="password-hint" class="form-hint"></div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 24px;">Create Account</button>
+    </form>
+
+    <div class="auth-switch">
+      Already have an account? <a href="{{ url_for('login') }}"><strong>Log in here</strong></a>
+    </div>
+  </div>
+</div>
+{% endblock %}

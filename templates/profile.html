@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile — Earnify{% endblock %}
+
+{% block content %}
+<div class="container profile-page">
+  <div class="breadcrumb">
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <span>/</span>
+    <span>Profile</span>
+  </div>
+
+  <!-- Profile Header Card -->
+  <div class="profile-header-card">
+    <div class="profile-avatar-lg">
+      {{ user.name[0]|upper }}
+    </div>
+    <div class="profile-meta" style="flex: 1;">
+      <h2>{{ user.name }}</h2>
+      <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px; margin-bottom: 8px;">
+        <span class="role-badge">{{ user.role|title }}</span>
+        <span style="font-size: 13px; color: var(--text-secondary);">&bull; Member since {{ user.created_at.strftime('%B %Y') }}</span>
+      </div>
+      <div style="font-size: 14px; color: var(--text-secondary);">
+        ✉️ {{ user.email }}
+      </div>
+    </div>
+    <div>
+      <a href="{{ url_for('edit_profile') }}" class="btn btn-outline btn-sm">✏️ Edit Profile</a>
+    </div>
+  </div>
+
+  <!-- Rate & Stats -->
+  {% if user.role == 'freelancer' %}
+    <div class="detail-info-grid" style="margin-bottom: 24px;">
+      <div class="detail-info-item">
+        <label>Hourly Rate</label>
+        <div class="value" style="color: var(--secondary);">
+          {% if profile and profile.hourly_rate %}
+            ${{ "%.2f"|format(profile.hourly_rate) }} / hr
+          {% else %}
+            <span style="font-size: 14px; font-weight: normal; color: var(--text-muted);">Not specified</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="detail-info-item">
+        <label>Account Status</label>
+        <div class="value" style="color: var(--success); font-size: 15px;">
+          ✓ Verified Active Member
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Bio Section -->
+  <div class="profile-section">
+    <h3>About &amp; Overview</h3>
+    {% if profile and profile.bio %}
+      <p style="white-space: pre-wrap;">{{ profile.bio }}</p>
+    {% else %}
+      <p style="color: var(--text-muted); font-style: italic;">
+        No bio added yet. Click "Edit Profile" to share your expertise, experience, and background.
+      </p>
+    {% endif %}
+  </div>
+
+  <!-- Skills Section -->
+  {% if user.role == 'freelancer' %}
+    <div class="profile-section">
+      <h3>Skills &amp; Expertise</h3>
+      {% if profile and profile.skills %}
+        <div class="skill-tags">
+          {% for skill in profile.skills.split(',') %}
+            {% if skill.strip() %}
+              <span class="skill-tag" style="font-size: 13px; padding: 4px 12px;">{{ skill.strip() }}</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="color: var(--text-muted); font-style: italic;">
+          No skills listed yet. Add your core technical and creative skills in profile settings.
+        </p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <!-- Links & Portfolio -->
+  <div class="profile-section">
+    <h3>Professional Links</h3>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div>
+        <strong>GitHub:</strong>
+        {% if profile and profile.github %}
+          <a href="{{ profile.github }}" target="_blank" rel="noopener noreferrer" style="margin-left: 8px;">{{ profile.github }}</a>
+        {% else %}
+          <span style="color: var(--text-muted); margin-left: 8px;">Not linked</span>
+        {% endif %}
+      </div>
+      <div>
+        <strong>LinkedIn:</strong>
+        {% if profile and profile.linkedin %}
+          <a href="{{ profile.linkedin }}" target="_blank" rel="noopener noreferrer" style="margin-left: 8px;">{{ profile.linkedin }}</a>
+        {% else %}
+          <span style="color: var(--text-muted); margin-left: 8px;">Not linked</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

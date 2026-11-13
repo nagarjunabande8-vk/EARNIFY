@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Applicants for {{ job.title }} — Earnify{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; padding-top: 32px; padding-bottom: 60px;">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="{{ url_for('client_dashboard') }}">Dashboard</a>
+    <span>/</span>
+    <a href="{{ url_for('job_detail', job_id=job.id) }}">{{ job.title }}</a>
+    <span>/</span>
+    <span>Applicants</span>
+  </div>
+
+  <div class="page-header" style="margin-bottom: 24px;">
+    <div>
+      <h1>Applicants for "{{ job.title }}"</h1>
+      <p class="text-secondary" style="margin-top: 4px;">
+        Category: <strong>{{ job.category }}</strong> &bull; 
+        Budget: <strong>${{ "%.0f"|format(job.budget) }}</strong> &bull; 
+        Total Applicants: <strong>{{ applicants|length }}</strong>
+      </p>
+    </div>
+    <a href="{{ url_for('client_dashboard') }}" class="btn btn-outline btn-sm">&larr; Back to Dashboard</a>
+  </div>
+
+  {% if applicants %}
+    <div class="applicant-cards">
+      {% for app in applicants %}
+        <div class="applicant-card">
+          <div class="applicant-header">
+            <div class="applicant-info">
+              <div class="applicant-avatar">
+                {{ app.freelancer.name[0]|upper if app.freelancer else 'F' }}
+              </div>
+              <div>
+                <div class="applicant-name">{{ app.freelancer.name if app.freelancer else 'Freelancer' }}</div>
+                <div class="applicant-email">{{ app.freelancer.email if app.freelancer else '' }}</div>
+              </div>
+            </div>
+
+            <div>
+              <span class="badge badge-{{ app.status }}">
+                <span class="badge-dot"></span>
+                {{ app.status|title }}
+              </span>
+            </div>
+          </div>
+
+          <div class="applicant-rate">
+            Proposed Rate: <strong>${{ "%.0f"|format(app.proposed_rate) }}</strong> 
+            <span style="font-size: 13px; color: var(--text-muted); margin-left: 8px;">
+              Applied on {{ app.applied_at.strftime('%B %d, %Y at %I:%M %p') }}
+            </span>
+          </div>
+
+          <div class="applicant-letter">
+            <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px;">
+              Proposal &amp; Cover Letter:
+            </div>
+            {{ app.cover_letter }}
+          </div>
+
+          <div class="applicant-actions">
+            {% if app.status != 'accepted' %}
+              <form method="POST" action="{{ url_for('update_application_status', app_id=app.id) }}">
+                <input type="hidden" name="status" value="accepted">
+                <button type="submit" class="btn btn-success btn-sm">✓ Accept Proposal</button>
+              </form>
+            {% endif %}
+
+            {% if app.status != 'rejected' %}
+              <form method="POST" action="{{ url_for('update_application_status', app_id=app.id) }}">
+                <input type="hidden" name="status" value="rejected">
+                <button type="submit" class="btn btn-danger btn-sm">✗ Reject</button>
+              </form>
+            {% endif %}
+
+            {% if app.status == 'accepted' %}
+              <span style="font-size: 13px; color: var(--success); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                🎉 This proposal has been accepted!
+              </span>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state" style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+      <div class="empty-state-icon">👥</div>
+      <h3>No applicants yet</h3>
+      <p>Your job posting is live on the marketplace. Freelancers will be submitting proposals soon.</p>
+      <a href="{{ url_for('client_dashboard') }}" class="btn btn-outline">Back to Dashboard</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

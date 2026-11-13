@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Earnify — Professional Freelancing Marketplace{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="{{ url_for('index') }}" class="logo">EARN<span>IFY</span></a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="nav-links">
+        <a href="{{ url_for('jobs') }}">Find Jobs</a>
+        {% if session.get('user_id') %}
+          <a href="{{ url_for('dashboard') }}">Dashboard</a>
+          {% if session.get('role') == 'client' %}
+            <a href="{{ url_for('new_job') }}">Post a Job</a>
+          {% endif %}
+          <a href="{{ url_for('my_profile') }}">Profile</a>
+          <span class="nav-user">{{ session.get('name') }}</span>
+          <a href="{{ url_for('logout') }}" class="btn-ghost" style="color: #fff; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px;">Log Out</a>
+        {% else %}
+          <a href="{{ url_for('index') }}#how-it-works">How It Works</a>
+          <a href="{{ url_for('index') }}#about">About Us</a>
+          <a href="{{ url_for('login') }}">Log In</a>
+          <a href="{{ url_for('signup') }}" class="btn-nav">Sign Up</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack">
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">
+                <span>{{ message }}</span>
+                <button class="flash-close" aria-label="Dismiss">&times;</button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer" id="about">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="{{ url_for('index') }}" class="logo" style="display: inline-block; margin-bottom: 12px;">EARN<span>IFY</span></a>
+          <p>The premium freelancing marketplace connecting ambitious clients with skilled freelancers, freshers, and university graduates worldwide.</p>
+        </div>
+        <div class="footer-col">
+          <h4>For Freelancers</h4>
+          <a href="{{ url_for('jobs') }}">Browse Jobs</a>
+          <a href="{{ url_for('jobs', category='Web Development') }}">Web Development</a>
+          <a href="{{ url_for('jobs', category='UI/UX Design') }}">Design Projects</a>
+          <a href="{{ url_for('signup', role='freelancer') }}">Create Freelancer Account</a>
+        </div>
+        <div class="footer-col">
+          <h4>For Clients</h4>
+          <a href="{{ url_for('new_job') }}">Post a Job</a>
+          <a href="{{ url_for('signup', role='client') }}">Hire Talent</a>
+          <a href="{{ url_for('jobs') }}">Explore Opportunities</a>
+          <a href="{{ url_for('index') }}#how-it-works">How Hiring Works</a>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="{{ url_for('index') }}">Home</a>
+          <a href="{{ url_for('index') }}#how-it-works">How It Works</a>
+          <a href="{{ url_for('login') }}">Sign In</a>
+          <a href="{{ url_for('signup') }}">Join Earnify</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; {{ 2026 }} Earnify Inc. All rights reserved. Built for quality, security, and career acceleration.
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

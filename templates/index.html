@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Earnify — Find Opportunities. Build Your Future.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1>Find Opportunities.<br>Build Your Future.</h1>
+      <p class="hero-sub">Connect with clients, discover exciting projects and turn your skills into real opportunities with confidence and security.</p>
+
+      <form action="{{ url_for('jobs') }}" method="GET" class="hero-search">
+        <input type="text" name="q" placeholder="Job title, skills or keywords...">
+        <select name="category">
+          <option value="">All Categories</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Python Development">Python Development</option>
+          <option value="UI/UX Design">UI/UX Design</option>
+          <option value="Graphic Design">Graphic Design</option>
+          <option value="Content Writing">Content Writing</option>
+          <option value="Digital Marketing">Digital Marketing</option>
+          <option value="Data Entry">Data Entry</option>
+          <option value="Mobile App Development">Mobile App Development</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.jobs }}+</span>
+          <span class="hero-stat-label">Active Jobs</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.freelancers }}+</span>
+          <span class="hero-stat-label">Talented Freelancers</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.clients }}+</span>
+          <span class="hero-stat-label">Verified Clients</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Section -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Explore Top Categories</h2>
+      <p>Discover high-demand freelance categories and find your next breakthrough project.</p>
+    </div>
+
+    <div class="categories-grid">
+      <a href="{{ url_for('jobs', category='Web Development') }}" class="category-card">
+        <div class="category-icon">💻</div>
+        <h3>Web Development</h3>
+        <p>Frontend, Backend & Full-Stack</p>
+      </a>
+
+      <a href="{{ url_for('jobs', category='Python Development') }}" class="category-card">
+        <div class="category-icon">🐍</div>
+        <h3>Python Development</h3>
+        <p>Flask, Django, Automation & AI</p>
+      </a>
+
+      <a href="{{ url_for('jobs', category='UI/UX Design') }}" class="category-card">
+        <div class="category-icon">🎨</div>
+        <h3>UI/UX Design</h3>
+        <p>Figma, Wireframing & Prototyping</p>
+      </a>
+
+      <a href="{{ url_for('jobs', category='Graphic Design') }}" class="category-card">
+        <div class="category-icon">✨</div>
+        <h3>Graphic Design</h3>
+        <p>Logos, Branding & Social Media</p>
+      </a>
+
+      <a href="{{ url_for('jobs', category='Content Writing') }}" class="category-card">
+        <div class="category-icon">✍️</div>
+        <h3>Content Writing</h3>
+        <p>Articles, Copywriting & SEO Content</p>
+      </a>
+
+      <a href="{{ url_for('jobs', category='Digital Marketing') }}" class="category-card">
+        <div class="category-icon">📈</div>
+        <h3>Digital Marketing</h3>
+        <p>SEO, Paid Ads & Social Strategy</p>
+      </a>
+
+      <a href="{{ url_for('jobs', category='Data Entry') }}" class="category-card">
+        <div class="category-icon">📊</div>
+        <h3>Data Entry</h3>
+        <p>Excel, Cleaning & Virtual Assistance</p>
+      </a>
+
+      <a href="{{ url_for('jobs', category='Mobile App Development') }}" class="category-card">
+        <div class="category-icon">📱</div>
+        <h3>Mobile Development</h3>
+        <p>Flutter, React Native, iOS & Android</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Jobs Section -->
+<section class="section" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="section-header">
+      <h2>Featured Opportunities</h2>
+      <p>Browse recently posted verified projects looking for top talent today.</p>
+    </div>
+
+    <div class="featured-grid">
+      {% for job in featured_jobs %}
+        <a href="{{ url_for('job_detail', job_id=job.id) }}" class="featured-card">
+          <div class="featured-card-header">
+            <h3>{{ job.title }}</h3>
+            <span class="budget-badge">${{ "%.0f"|format(job.budget) }}</span>
+          </div>
+          <div class="meta">
+            <span>Posted by {{ job.client.name if job.client else 'Client' }}</span> &bull; 
+            <span>{{ job.category }}</span>
+          </div>
+          <p class="desc">{{ job.description }}</p>
+          <div class="skill-tags">
+            {% for skill in job.skills_list %}
+              <span class="skill-tag">{{ skill }}</span>
+            {% endfor %}
+          </div>
+        </a>
+      {% else %}
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <div class="empty-state-icon">💼</div>
+          <h3>No open jobs right now</h3>
+          <p>Check back shortly or post a new job to start hiring.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 36px;">
+      <a href="{{ url_for('jobs') }}" class="btn btn-outline btn-lg">Browse All Available Jobs &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="section how-it-works" id="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <h2>How Earnify Works</h2>
+      <p>Simple, transparent and tailored for both freelancers and businesses.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Create Your Account</h3>
+        <p>Sign up in under two minutes as a freelancer looking for opportunities or as a client ready to hire.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Discover & Post</h3>
+        <p>Browse projects with transparent budgets or publish your job requirements to attract qualified applicants.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Collaborate & Grow</h3>
+        <p>Submit customized proposals, connect directly with clients, deliver quality work, and get paid securely.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <h2>Ready to Elevate Your Freelance Career?</h2>
+      <p>Join thousands of beginners, university students, and skilled professionals finding their dream freelance contracts on Earnify.</p>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('signup', role='freelancer') }}" class="btn">Get Started as Freelancer</a>
+        <a href="{{ url_for('signup', role='client') }}" class="btn" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff;">Hire Top Talent</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
